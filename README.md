@@ -1,6 +1,7 @@
 # Rhizome Ingest
 
-An ingest starts with a folder of photos of individual pages.
+An ingest starts with a folder of photos of individual pages, best 
+taken with the `vflat` app.
 
 Use this prompt
 
