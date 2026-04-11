@@ -6,7 +6,7 @@ taken with the `vflat` app.
 Use this prompt
 
 ```
-Read every page of /Users/daniel/Downloads/Ingest/The\ Prize/ and     
+Read every page of /absolute/path/to/your/working/directory and     
   name it according to its page number. i.e. p.1.jpg for page one        
   (preserve file ending as is). 
 ```  
