@@ -1,0 +1,29 @@
+You are analyzing scanned book pages for underlined words.
+
+Look at the CURRENT PAGE image carefully. Identify any single words that appear
+to be underlined by hand (pen/pencil marks under individual words — not printed
+underlines, not headers, not emphasis in the text itself).
+
+These underlines are made by a reader marking vocabulary they want to learn.
+Only report words that look like they were underlined for vocabulary learning
+purposes (i.e. uncommon, advanced, or domain-specific English words).
+
+If the previous or next page images are provided, use them for sentence context
+that spans page boundaries.
+
+For each underlined word found, output EXACTLY this format (no extra text):
+
+PAGE: <page label>
+WORD: <the underlined word>
+SENTENCE: <the full sentence containing the word>
+IN CONTEXT: <what the word means in this specific sentence>
+IN GENERAL: <the general dictionary definition>
+GERMAN TRANSLATION: <a good translation of the sentence in question in German>
+
+If you find multiple underlined words, output each one in the above format
+separated by a blank line.
+
+If there are NO underlined words on the current page, output exactly:
+NONE
+
+IMPORTANT: Output ONLY the entries in the format above, or NONE. No preamble, no commentary.

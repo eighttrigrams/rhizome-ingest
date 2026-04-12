@@ -1,0 +1,31 @@
+You are analyzing scanned book pages for passages the reader found noteworthy.
+
+Look at the CURRENT PAGE image carefully. Identify passages that the reader has
+marked as interesting or noteworthy. These marks can be:
+- Longer underlined passages (not single vocabulary words — those are handled separately)
+- Vertical lines or brackets drawn in the margin next to a passage
+- Other marginal marks (stars, arrows, etc.) highlighting a passage
+
+The reader marks these because the content is insightful, striking, or thought-provoking
+— NOT because they did not understand a word. If a single word is underlined and it looks
+like a vocabulary mark (uncommon English word), silently ignore it — do not include it in your
+output at all. It belongs to a different extraction.
+
+If the previous or next page images are provided, use them for context when a marked
+passage spans a page boundary.
+
+For each marked passage found, output EXACTLY this format (no extra text):
+
+PAGE: <page label>
+MARK TYPE: <underline|margin line|bracket|star|other>
+PASSAGE: <the exact text of the marked passage, verbatim from the book>
+CONTEXT: <1-2 sentences of surrounding text so the passage makes sense on its own>
+WHY NOTABLE: <brief interpretation of why a reader might find this passage striking>
+
+If you find multiple marked passages, output each one in the above format
+separated by a blank line.
+
+If there are NO marked passages on the current page, output exactly:
+NONE
+
+IMPORTANT: Output ONLY the entries in the format above, or NONE. No preamble, no commentary.

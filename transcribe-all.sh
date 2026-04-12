@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-CONFIG="${SCRIPT_DIR}/transcribe.conf"
+CONFIG="${SCRIPT_DIR}/working-dir.conf"
 
 if [ ! -f "$CONFIG" ]; then
   echo "Missing config: $CONFIG"
@@ -11,7 +11,6 @@ fi
 
 source "$CONFIG"
 : "${DIR:?DIR not set in $CONFIG}"
-: "${MAX_PARALLEL:=4}"
 
 roman_to_int() {
   local input="${1,,}"
@@ -84,25 +83,7 @@ if [ ${#all_pages[@]} -eq 0 ]; then
 fi
 
 echo "Pages: ${all_pages[*]}"
-echo "Parallel: $MAX_PARALLEL"
 echo ""
-
-pids=()
-names=()
-
-drain() {
-  local keep_pids=() keep_names=()
-  for i in "${!pids[@]}"; do
-    if kill -0 "${pids[$i]}" 2>/dev/null; then
-      keep_pids+=("${pids[$i]}")
-      keep_names+=("${names[$i]}")
-    else
-      wait "${pids[$i]}" && echo "DONE p.${names[$i]}" || echo "FAIL p.${names[$i]}"
-    fi
-  done
-  pids=("${keep_pids[@]}")
-  names=("${keep_names[@]}")
-}
 
 for page in "${all_pages[@]}"; do
   img=""
@@ -114,20 +95,12 @@ for page in "${all_pages[@]}"; do
   md="$DIR/p.${page}.md"
   [ -f "$md" ] && echo "SKIP p.$page" && continue
 
-  while [ "${#pids[@]}" -ge "$MAX_PARALLEL" ]; do
-    drain
-    [ "${#pids[@]}" -ge "$MAX_PARALLEL" ] && sleep 0.5
-  done
-
-  echo "START p.$page"
-  tesseract "$img" stdout -l eng > "$md" 2>/dev/null &
-  pids+=($!)
-  names+=("$page")
-done
-
-while [ "${#pids[@]}" -gt 0 ]; do
-  drain
-  [ "${#pids[@]}" -gt 0 ] && sleep 0.5
+  echo -n "p.$page ... "
+  if tesseract "$img" stdout -l eng > "$md" 2>/dev/null; then
+    echo "DONE"
+  else
+    echo "FAIL"
+  fi
 done
 
 echo ""

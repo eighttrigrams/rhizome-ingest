@@ -1,2 +1,6 @@
 .claude/settings.local.json
-transcribe.conf
+working-dir.conf
+ingest.conf
+hooks.log
+unknown-vocabulary.md
+extracted-bookquotes.md
