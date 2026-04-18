@@ -1,6 +1,0 @@
-{:db {:dbtype   "postgresql"
-      :dbname   "cometoid_dev"
-      :user     "daniel"
-      :password "abcdef"
-      :port     5437
-      :hostname "127.0.0.1"}}
