@@ -1,6 +1,7 @@
 .claude/settings.local.json
 working-dir.conf
 ingest.conf
+db.conf
 hooks.log
 unknown-vocabulary.md
 extracted-bookquotes.md

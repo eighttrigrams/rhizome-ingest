@@ -1,8 +1,11 @@
 # Rhizome Ingest
 
-Uses Rhizomes new Rest API. A skill for that is present under `.claude/skill/ingest-clj.md`.
+Uses Rhizome's new Rest API. A skill for that is present under `.claude/skill/rhizome-cli`
+and a script under `rhizome-cli.sh`.
 
-## Page numbering
+## Ingest
+
+### Page numbering
 
 An ingest starts with a folder of photos of individual pages, best 
 taken with the `vflat` app.
@@ -17,21 +20,26 @@ Read every page of /absolute/path/to/your/working/directory and
 
 I have tested this for roughly 30 pages.
 
-## Transcription
+### Ingest
+
+You can ingest all pages inside a folder with the (non-idempotent) operation
+
+```bash
+./ingest-pages.sh
+./ingest-pages.sh --override-pages
+```
+
+This uses `ingest.conf` and `working-dir.conf`.
+
+### Transcription
 
 Use `./transcribe-all.sh` to transcribe the files. Set the working dir
 in `transcribe.conf`. It uses `tesseract` OCR (installed via `homebrew`).
 It creates sidecar files for each of the files.
 
-## Ingest
 
-You can ingest all pages inside a folder with the (non-idempotent) operation
 
-```
-./ingest-pages.sh
-```
-
-## Bookquotes
+### Bookquotes
 
 Extacts underlined pages.
 
@@ -43,7 +51,7 @@ Extacts underlined pages.
 
 Roman numerals work as well here.
 
-## New vocabulary
+### New vocabulary
 
 Extracts new vocabulary.
 
@@ -52,3 +60,11 @@ Extracts new vocabulary.
 ```
 
 Supports the same range arguments as `extract-bookquotes.sh`.
+
+## Development
+
+Use
+
+```
+reset-dev-db.sh
+```

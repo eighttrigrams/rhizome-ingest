@@ -1,0 +1,5 @@
+DB_NAME="cometoid_dev"
+DB_USER="daniel"
+DB_PASSWORD="abcdef"
+DB_PORT=5437
+DB_HOST="127.0.0.1"

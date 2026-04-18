@@ -1,6 +1,6 @@
 ---
-name: rhizome-ingest-cli
-description: CLI tool for ingesting items into Rhizome via its REST API
+name: rhizome-cli
+description: CLI tool for interacting with Rhizome via its REST API
 triggers:
   - ingest
   - add item to rhizome
@@ -8,13 +8,13 @@ triggers:
   - add to context
 ---
 
-# Rhizome Ingest CLI
+# Rhizome CLI
 
-`ingest.sh` is a bash CLI that talks to Rhizome's local REST API (`http://127.0.0.1:3006/rest/`).
+`rhizome-cli.sh` is a bash CLI that talks to Rhizome's local REST API (`http://127.0.0.1:<port>/rest/`).
 
 ## Prerequisites
 
-- Rhizome must be running locally (default port 3006)
+- Rhizome must be running locally
 - `curl` and `python3` available on PATH
 
 ## Commands
@@ -23,25 +23,25 @@ The `--port` flag is mandatory and must come first.
 
 ### List contexts
 ```bash
-./ingest.sh --port 3006 contexts
-./ingest.sh --port 3006 contexts --search "Books"
+./rhizome-cli.sh --port 3006 contexts
+./rhizome-cli.sh --port 3006 contexts --search "Books"
 ```
 
 ### Create a context
 ```bash
-./ingest.sh --port 3006 add-context "My New Context"
+./rhizome-cli.sh --port 3006 add-context "My New Context"
 ```
 
 ### Add an item linked to contexts
 ```bash
-./ingest.sh --port 3006 add-item "Article title or URL" --contexts 42,17
+./rhizome-cli.sh --port 3006 add-item "Article title or URL" --contexts 42,17
 ```
 The `--contexts` flag takes a comma-separated list of context IDs. At least one is required.
 URLs (YouTube, GitHub, Substack, etc.) are auto-detected and enriched by rhizome's insertion pipeline.
 
 ### Get an item
 ```bash
-./ingest.sh --port 3006 get-item 123
+./rhizome-cli.sh --port 3006 get-item 123
 ```
 
 ## REST API Endpoints (behind the scenes)
@@ -61,10 +61,12 @@ URLs (YouTube, GitHub, Substack, etc.) are auto-detected and enriched by rhizome
 PORT=3006
 BOOK_ID=<context-id-for-the-book>
 PAGES_ID=<context-id-for-pages>
-DIR="/path/to/pages"
+# CHAPTER_ID=<context-id-for-chapter>
 ```
 
-Each page becomes an item with title `p.<N>` and the file content as description.
+The working directory (where the `p.*.md` files are) is set in `working-dir.conf`.
+
+Each page becomes an item with title `p.<N>` and the file content as description. CHAPTER_ID is optional.
 
 ```bash
 ./ingest-pages.sh
@@ -74,6 +76,6 @@ The POST `/rest/items` endpoint also accepts an optional `description` field for
 
 ## Typical workflow
 
-1. `./ingest.sh --port 3006 contexts --search "keyword"` to find the right context ID
-2. `./ingest.sh --port 3006 add-item "title or URL" --contexts <id>` to ingest
+1. `./rhizome-cli.sh --port 3006 contexts --search "keyword"` to find the right context ID
+2. `./rhizome-cli.sh --port 3006 add-item "title or URL" --contexts <id>` to ingest
 3. For batch page ingestion: fill in `ingest.conf` and run `./ingest-pages.sh`
