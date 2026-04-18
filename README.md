@@ -65,6 +65,12 @@ Supports the same range arguments as `extract-bookquotes.sh`.
 
 Use
 
-```
+```bash
 reset-dev-db.sh
+```
+
+and 
+
+```bash
+test-ingest.sh
 ```
