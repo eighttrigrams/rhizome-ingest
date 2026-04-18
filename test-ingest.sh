@@ -69,7 +69,6 @@ OTHER_BOOK_ID=$($PSQL -c "INSERT INTO items (title, short_title, data, is_contex
 echo "Contexts: Books=$BOOKS_ID Pages=$PAGES_ID Book=$BOOK_ID Chapter=$CHAPTER_ID OtherBook=$OTHER_BOOK_ID"
 
 cat > "${SCRIPT_DIR}/ingest.conf" <<EOF
-PORT=3006
 BOOK_ID=$BOOK_ID
 PAGES_ID=$PAGES_ID
 CHAPTER_ID=$CHAPTER_ID
@@ -157,7 +156,6 @@ assert_eq "invalid BOOK_ID rejected" "1" "$([ "$has_error" -ge 1 ] && echo 1 || 
 
 # Restore valid config
 cat > "${SCRIPT_DIR}/ingest.conf" <<EOF
-PORT=3006
 BOOK_ID=$BOOK_ID
 PAGES_ID=$PAGES_ID
 CHAPTER_ID=$CHAPTER_ID
@@ -174,7 +172,6 @@ $PSQL -c "DELETE FROM history;" -q
 $PSQL -c "DELETE FROM items WHERE is_context = false;" -q
 
 cat > "${SCRIPT_DIR}/ingest.conf" <<EOF
-PORT=3006
 BOOK_ID=$BOOK_ID
 PAGES_ID=$PAGES_ID
 EOF
@@ -212,7 +209,6 @@ $PSQL -c "DELETE FROM history;" -q
 $PSQL -c "DELETE FROM items WHERE is_context = false;" -q
 
 cat > "${SCRIPT_DIR}/ingest.conf" <<EOF
-PORT=3006
 BOOK_ID=$BOOK_ID
 PAGES_ID=$PAGES_ID
 CHAPTER_ID=$CHAPTER_ID
@@ -223,7 +219,6 @@ assert_eq "32 chaptered items" "32" "$(item_count)"
 
 # Now ingest WITHOUT chapter - should create new items (no match due to missing chapter)
 cat > "${SCRIPT_DIR}/ingest.conf" <<EOF
-PORT=3006
 BOOK_ID=$BOOK_ID
 PAGES_ID=$PAGES_ID
 EOF
@@ -236,7 +231,6 @@ echo ""
 
 # Restore config
 cat > "${SCRIPT_DIR}/ingest.conf" <<EOF
-PORT=3006
 BOOK_ID=$BOOK_ID
 PAGES_ID=$PAGES_ID
 CHAPTER_ID=$CHAPTER_ID

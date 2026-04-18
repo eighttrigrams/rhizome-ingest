@@ -39,6 +39,7 @@ echo "Creating contexts..."
 
 create_context "Books" BOOKS_ID
 create_context "Pages" PAGES_ID
+create_context "Bookquotes" BOOKQUOTES_ID
 create_context "The Book" BOOK_ID
 create_context "Chapter 1" CHAPTER_ID
 
@@ -46,6 +47,11 @@ INGEST_CONF="${SCRIPT_DIR}/ingest.conf"
 if [ -f "$INGEST_CONF" ]; then
   sed -i '' "s/^BOOK_ID=.*/BOOK_ID=$BOOK_ID/" "$INGEST_CONF"
   sed -i '' "s/^PAGES_ID=.*/PAGES_ID=$PAGES_ID/" "$INGEST_CONF"
+  if grep -q "^BOOKQUOTES_ID=" "$INGEST_CONF"; then
+    sed -i '' "s/^BOOKQUOTES_ID=.*/BOOKQUOTES_ID=$BOOKQUOTES_ID/" "$INGEST_CONF"
+  else
+    echo "BOOKQUOTES_ID=$BOOKQUOTES_ID" >> "$INGEST_CONF"
+  fi
   if grep -q "^CHAPTER_ID=" "$INGEST_CONF"; then
     sed -i '' "s/^CHAPTER_ID=.*/CHAPTER_ID=$CHAPTER_ID/" "$INGEST_CONF"
   else
@@ -55,12 +61,14 @@ if [ -f "$INGEST_CONF" ]; then
   echo "Updated ingest.conf:"
   echo "  BOOK_ID=$BOOK_ID"
   echo "  PAGES_ID=$PAGES_ID"
+  echo "  BOOKQUOTES_ID=$BOOKQUOTES_ID"
   echo "  CHAPTER_ID=$CHAPTER_ID"
 else
   echo ""
   echo "No ingest.conf found. Create it with:"
   echo "  BOOK_ID=$BOOK_ID"
   echo "  PAGES_ID=$PAGES_ID"
+  echo "  BOOKQUOTES_ID=$BOOKQUOTES_ID"
   echo "  CHAPTER_ID=$CHAPTER_ID"
 fi
 

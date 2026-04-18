@@ -20,24 +20,11 @@ Read every page of /absolute/path/to/your/working/directory and
 
 I have tested this for roughly 30 pages.
 
-### Ingest
-
-You can ingest all pages inside a folder with the (non-idempotent) operation
-
-```bash
-./ingest-pages.sh
-./ingest-pages.sh --override-pages
-```
-
-This uses `ingest.conf` and `working-dir.conf`.
-
 ### Transcription
 
 Use `./transcribe-all.sh` to transcribe the files. Set the working dir
 in `transcribe.conf`. It uses `tesseract` OCR (installed via `homebrew`).
 It creates sidecar files for each of the files.
-
-
 
 ### Bookquotes
 
@@ -60,6 +47,25 @@ Extracts new vocabulary.
 ```
 
 Supports the same range arguments as `extract-bookquotes.sh`.
+
+### Ingest into Rhizome
+
+You can ingest all pages inside a folder with the (non-idempotent) operation
+
+```bash
+./ingest-pages.sh
+./ingest-pages.sh --override-pages
+./ingest-pages.sh --prod
+```
+
+This uses `ingest.conf` and `working-dir.conf`.
+
+Then there is
+
+```bash
+./ingest-bookquotes.sh
+./ingest-bookquotes.sh --prod
+```
 
 ## Development
 

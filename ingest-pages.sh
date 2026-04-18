@@ -2,10 +2,15 @@
 set -euo pipefail
 
 OVERRIDE_PAGES=false
-if [[ "${1:-}" == "--override-pages" ]]; then
-  OVERRIDE_PAGES=true
-  shift
-fi
+PORT=3006
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --override-pages) OVERRIDE_PAGES=true; shift ;;
+    --prod) PORT=3007; shift ;;
+    *) break ;;
+  esac
+done
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
@@ -24,7 +29,6 @@ if [ ! -f "$INGEST_CONF" ]; then
   exit 1
 fi
 source "$INGEST_CONF"
-: "${PORT:?PORT not set in $INGEST_CONF}"
 : "${BOOK_ID:?BOOK_ID not set in $INGEST_CONF}"
 : "${PAGES_ID:?PAGES_ID not set in $INGEST_CONF}"
 
