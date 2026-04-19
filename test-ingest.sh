@@ -9,7 +9,6 @@ export PGPASSWORD="$DB_PASSWORD"
 PSQL="psql -h $DB_HOST -p $DB_PORT -U $DB_USER $DB_NAME -t"
 
 BASE_URL="http://127.0.0.1:3006"
-CLI="${SCRIPT_DIR}/rhizome-cli.sh"
 
 pass=0
 fail=0

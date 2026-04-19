@@ -28,12 +28,11 @@ if [ ! -f "$INPUT" ]; then
 fi
 
 BASE_URL="http://127.0.0.1:${PORT}"
-CLI="${SCRIPT_DIR}/rhizome-cli.sh"
 
 fetch_title() {
   local id="$1"
   local result title
-  result=$("$CLI" --port "$PORT" get-item "$id" 2>/dev/null) || return 1
+  result=$(curl -sf "${BASE_URL}/rest/items/${id}" 2>/dev/null) || return 1
   title=$(echo "$result" | python3 -c "
 import sys,json
 d = json.load(sys.stdin)
