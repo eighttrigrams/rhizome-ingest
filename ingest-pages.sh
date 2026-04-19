@@ -234,3 +234,13 @@ done
 
 echo ""
 echo "Done. $ok ingested, $fail failed."
+
+echo ""
+echo "Triggering embedding backfill..."
+backfill_resp=$(curl -sf -X POST "${BASE_URL}/rest/backfill/embeddings" || true)
+if [ -n "$backfill_resp" ]; then
+  embedded=$(echo "$backfill_resp" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('embedded','?'))" 2>/dev/null || echo "?")
+  echo "  embedded $embedded item(s)."
+else
+  echo "  backfill call failed (is the server running? recording-mode on?)"
+fi
