@@ -169,7 +169,7 @@ $read_instructions
 
 Only look for marked passages on the CURRENT PAGE (p.$page). The other pages are for context only."
 
-  result=$(echo "$full_prompt" | claude -p --add-dir "$DIR" --tools "Read" 2>/dev/null) || true
+  result=$(echo "$full_prompt" | claude -p --model claude-opus-4-6 --effort max --add-dir "$DIR" --tools "Read" 2>/dev/null) || true
 
   if [ -z "$result" ] || [[ "$result" == "NONE" ]]; then
     echo "no marked passages"
