@@ -1,8 +1,5 @@
 # Rhizome Ingest
 
-Uses Rhizome's new Rest API. A skill for that is present under `.claude/skill/rhizome-cli`
-and a script under `rhizome-cli.sh`.
-
 ## Ingest
 
 ### Page numbering
@@ -48,35 +45,10 @@ Extracts new vocabulary.
 
 Supports the same range arguments as `extract-bookquotes.sh`.
 
-### Ingest into Rhizome
-
-You can ingest all pages inside a folder with the (non-idempotent) operation
-
-```bash
-./ingest-pages.sh
-./ingest-pages.sh --override-pages
-./ingest-pages.sh --prod
-```
-
-This uses `ingest.conf` and `working-dir.conf`.
-
-Then there is
-
-```bash
-./ingest-bookquotes.sh
-./ingest-bookquotes.sh --prod
-```
-
 ## Development
 
 Use
 
 ```bash
 reset-dev-db.sh
-```
-
-and 
-
-```bash
-test-ingest.sh
 ```
