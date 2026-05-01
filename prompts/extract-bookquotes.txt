@@ -12,12 +12,14 @@ like a vocabulary mark (uncommon English word), silently ignore it — do not in
 output at all. It belongs to a different extraction.
 
 If the previous or next page images are provided, use them for context when a marked
-passage spans a page boundary.
+passage spans a page boundary. IN ANY CASE, the PAGE ASSIGNED is about the CENTRE OF GRAVITY, i.e.
+for any given highlight, if it goes across a page boundary, assign the page where the important part 
+of it sits.
 
 For each marked passage found, output EXACTLY this format (no extra text):
 
 PAGE: <page label>
-MARK TYPE: <underline|margin line|bracket|star|other>
+MARK TYPE: description of how the underlining or highlighting looks like
 PASSAGE: <the exact text of the marked passage, verbatim from the book>
 CONTEXT: <1-2 sentences of surrounding text so the passage makes sense on its own>
 WHY NOTABLE: <brief interpretation of why a reader might find this passage striking>

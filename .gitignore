@@ -4,5 +4,8 @@ ingest.conf
 ingest.conf.prod
 db.conf
 hooks.log
+logs
 unknown-vocabulary.md
 extracted-bookquotes.md
+extracted-bookquotes.*.md
+data
