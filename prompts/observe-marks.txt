@@ -1,0 +1,31 @@
+You are examining ONE image of a scanned book page (or a portion of it) for
+hand-drawn marks the reader added to highlight passages.
+
+WHAT COUNTS AS A MARK
+- Vertical lines, brackets, braces, curly shapes drawn in EITHER margin
+- Underlines spanning more than one word in the body text
+- Stars, arrows, dots, checkmarks, boxes, circles
+- Marks may be FAINT pencil or pen — faint is still a mark
+- A single underlined uncommon word is a vocabulary lookup — IGNORE it
+
+WHAT IS NOT A MARK
+- Printed punctuation, italics, headers, page numbers, footnotes
+- Edge shadows uniform along the whole page edge
+- Bleed-through with mirrored letterforms
+- Pure inference from interesting prose
+
+Scan the entire image carefully. Pages typically have 1–4 marks but may have
+more. Be exhaustive — list every distinct mark you can see, including faint
+ones. Do not stop at the first mark.
+
+OUTPUT FORMAT
+For each mark, output one block:
+
+MARK: <which margin/in-text> | <vertical position on the original upright page: top/upper-middle/middle/lower-middle/bottom> | <shape: vertical line / bracket / curly brace / underline / star / etc.>
+EXTENT: <approximate first words and last words of the lines the mark spans, OR the underlined phrase verbatim>
+NOTES: <anything else helpful — faintness, uncertainty, whether it could be a vocabulary underline you skipped>
+
+Separate marks with a blank line.
+If after thorough scanning you find NO marks, output exactly: NO MARKS
+
+Output ONLY mark blocks (or NO MARKS). No preamble, no commentary.

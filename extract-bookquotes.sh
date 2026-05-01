@@ -13,6 +13,16 @@ source "$CONFIG"
 : "${DIR:?DIR not set in $CONFIG}"
 
 OUTPUT="${SCRIPT_DIR}/extracted-bookquotes.md"
+WORK="${SCRIPT_DIR}/current-img"
+
+OBSERVE_PROMPT="$(cat "${SCRIPT_DIR}/prompts/observe-marks.txt")"
+EXTRACT_PROMPT="$(cat "${SCRIPT_DIR}/prompts/extract-bookquotes.txt")"
+
+cleanup() { rm -rf "$WORK"; }
+
+call_delay() {
+  sleep $(( RANDOM % 5 + 1 ))
+}
 
 roman_to_int() {
   local input="${1,,}"
@@ -111,73 +121,149 @@ idx_of() {
   echo "-1"
 }
 
-PROMPT="$(cat "${SCRIPT_DIR}/prompts/extract-bookquotes.txt")"
+observe_one() {
+  local label="$1"; local img="$2"; local hint="$3"
+  local input="$OBSERVE_PROMPT
+
+You are looking at: $hint
+
+Read the image file: $img
+"
+  echo "$input" | claude -p --model claude-opus-4-7 --effort low --add-dir "$WORK" --tools "Read" 2>/dev/null || true
+}
 
 for page in "${all_pages[@]}"; do
-  img="$(find_image "$page")"
-  if [ -z "$img" ]; then
+  src_img="$(find_image "$page")"
+  if [ -z "$src_img" ]; then
     echo "WARN p.$page: no image"
     continue
   fi
 
-  idx=$(idx_of "$page")
-  args=()
+  cleanup
+  mkdir -p "$WORK"
 
+  ext="${src_img##*.}"
+  full="$WORK/p.${page}.${ext}"
+  tl="$WORK/p.${page}.tl.${ext}"
+  tr="$WORK/p.${page}.tr.${ext}"
+  bl="$WORK/p.${page}.bl.${ext}"
+  br="$WORK/p.${page}.br.${ext}"
+  observation="$WORK/p.${page}.observation.txt"
+
+  cp "$src_img" "$full"
+
+  idx=$(idx_of "$page")
+  prev_full=""
+  next_full=""
   if (( idx > 0 )); then
     prev_page="${ordered[$((idx - 1))]}"
-    prev_img="$(find_image "$prev_page")"
-    if [ -n "$prev_img" ]; then
-      args+=("$prev_img")
+    prev_src="$(find_image "$prev_page")"
+    if [ -n "$prev_src" ]; then
+      prev_ext="${prev_src##*.}"
+      prev_full="$WORK/p.${prev_page}.${prev_ext}"
+      cp "$prev_src" "$prev_full"
     fi
   fi
-
-  args+=("$img")
-
   if (( idx < ${#ordered[@]} - 1 )); then
     next_page="${ordered[$((idx + 1))]}"
-    next_img="$(find_image "$next_page")"
-    if [ -n "$next_img" ]; then
-      args+=("$next_img")
+    next_src="$(find_image "$next_page")"
+    if [ -n "$next_src" ]; then
+      next_ext="${next_src##*.}"
+      next_full="$WORK/p.${next_page}.${next_ext}"
+      cp "$next_src" "$next_full"
     fi
   fi
 
-  n_imgs=${#args[@]}
-  if (( n_imgs == 1 )); then
-    position_hint="This is the only page image provided. It is the CURRENT PAGE (p.$page)."
-  elif (( n_imgs == 2 )); then
-    if (( idx == 0 )); then
-      position_hint="Two images: first is the CURRENT PAGE (p.$page), second is the next page (context only)."
-    else
-      position_hint="Two images: first is the previous page (context only), second is the CURRENT PAGE (p.$page)."
+  W=$(magick identify -format "%w" "$full")
+  H=$(magick identify -format "%h" "$full")
+  HALF_W=$((W/2 + 100))
+  HALF_H=$((H/2 + 100))
+  magick "$full" -crop "${HALF_W}x${HALF_H}+0+0" +repage "$tl"
+  magick "$full" -crop "${HALF_W}x${HALF_H}+$((W-HALF_W))+0" +repage "$tr"
+  magick "$full" -crop "${HALF_W}x${HALF_H}+0+$((H-HALF_H))" +repage "$bl"
+  magick "$full" -crop "${HALF_W}x${HALF_H}+$((W-HALF_W))+$((H-HALF_H))" +repage "$br"
+
+  echo -n "p.$page observe (4 quadrants) ... "
+
+  : > "$observation"
+
+  variant_specs=(
+    "TL|the TOP-LEFT quadrant of the page. Scan its left margin and body text for marks."
+    "TR|the TOP-RIGHT quadrant of the page. Scan its right margin and body text for marks."
+    "BL|the BOTTOM-LEFT quadrant of the page. Scan its left margin and body text for marks. Vertical positions in this image correspond to the LOWER half of the original page."
+    "BR|the BOTTOM-RIGHT quadrant of the page. Scan its right margin and body text for marks. Vertical positions in this image correspond to the LOWER half of the original page."
+  )
+
+  total_marks=0
+  for spec in "${variant_specs[@]}"; do
+    name="${spec%%|*}"
+    hint="${spec#*|}"
+    case "$name" in
+      TL) img="$tl" ;;
+      TR) img="$tr" ;;
+      BL) img="$bl" ;;
+      BR) img="$br" ;;
+    esac
+
+    call_delay
+    result=$(observe_one "$name" "$img" "$hint")
+
+    {
+      echo "===== VARIANT: $name ====="
+      if [ -z "$result" ]; then
+        echo "(no result)"
+      else
+        echo "$result"
+      fi
+      echo ""
+    } >> "$observation"
+
+    if [ -n "$result" ] && [[ "$result" != "NO MARKS" ]]; then
+      n=$(echo "$result" | grep -c "^MARK:" || true)
+      total_marks=$((total_marks + n))
     fi
-  else
-    position_hint="Three images: first is the previous page (context only), second is the CURRENT PAGE (p.$page), third is the next page (context only)."
-  fi
-
-  echo -n "p.$page ... "
-
-  read_instructions=""
-  for f in "${args[@]}"; do
-    read_instructions="${read_instructions}
-Read the image file: $f"
   done
 
-  full_prompt="$PROMPT
-
-$position_hint
-$read_instructions
-
-Only look for marked passages on the CURRENT PAGE (p.$page). The other pages are for context only."
-
-  result=$(echo "$full_prompt" | claude -p --model claude-opus-4-6 --effort max --add-dir "$DIR" --tools "Read" 2>/dev/null) || true
-
-  if [ -z "$result" ] || [[ "$result" == "NONE" ]]; then
-    echo "no marked passages"
+  if (( total_marks == 0 )); then
+    echo "no marks"
     continue
   fi
 
-  count=$(echo "$result" | grep -c "^PASSAGE:" || true)
-  echo "$count passage(s) found"
+  echo -n "${total_marks} raw mark(s); extract ... "
+
+  extract_input="$EXTRACT_PROMPT
+
+PAGE LABEL: $page
+
+COMBINED OBSERVATION REPORT (from 4 quadrant passes — DEDUPLICATE marks that appear in adjacent quadrants):
+---
+$(cat "$observation")
+---
+
+Images available:
+"
+
+  if [ -n "$prev_full" ]; then
+    extract_input="${extract_input}
+Read the image file: $prev_full   (PREVIOUS page p.${prev_page} — context only, for completing overflow passages)"
+  fi
+  extract_input="${extract_input}
+Read the image file: $full   (CURRENT page p.${page} — focus marks here)"
+  if [ -n "$next_full" ]; then
+    extract_input="${extract_input}
+Read the image file: $next_full   (NEXT page p.${next_page} — context only, for completing overflow passages)"
+  fi
+
+  call_delay
+  extract_result=$(echo "$extract_input" | claude -p --model claude-opus-4-7 --effort low --add-dir "$WORK" --tools "Read" 2>/dev/null) || true
+
+  if [ -z "$extract_result" ] || [[ "$extract_result" == "NONE" ]]; then
+    echo "no passages extracted"
+    continue
+  fi
+
+  count=$(echo "$extract_result" | grep -c "^PASSAGE:" || true)
+  echo "$count passage(s)"
 
   if [ -f "$OUTPUT" ]; then
     echo "" >> "$OUTPUT"
@@ -185,7 +271,7 @@ Only look for marked passages on the CURRENT PAGE (p.$page). The other pages are
     echo "" >> "$OUTPUT"
   fi
 
-  echo "$result" >> "$OUTPUT"
+  echo "$extract_result" >> "$OUTPUT"
 done
 
 echo ""

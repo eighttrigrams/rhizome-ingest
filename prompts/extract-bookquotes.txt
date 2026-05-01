@@ -1,33 +1,42 @@
-You are analyzing scanned book pages for passages the reader found noteworthy.
+You are extracting marked passages from a scanned book page. A separate
+observation pass has already identified the hand-drawn marks on this page,
+combining results from multiple views (full, left half, right half, rotated).
+Your job is to use the combined observation report together with the page
+images to produce well-formed entries.
 
-Look at the CURRENT PAGE image carefully. Identify passages that the reader has
-marked as interesting or noteworthy. These marks can be:
-- Longer underlined passages (not single vocabulary words — those are handled separately)
-- Vertical lines or brackets drawn in the margin next to a passage
-- Other marginal marks (stars, arrows, etc.) highlighting a passage
+YOU ARE GIVEN
+- The CURRENT PAGE image
+- The PREVIOUS PAGE image and/or NEXT PAGE image (when available) — for context
+  only, used to complete a passage that overflows a page boundary
+- A combined observation report listing every mark detected across the variant
+  views of the CURRENT PAGE
 
-The reader marks these because the content is insightful, striking, or thought-provoking
-— NOT because they did not understand a word. If a single word is underlined and it looks
-like a vocabulary mark (uncommon English word), silently ignore it — do not include it in your
-output at all. It belongs to a different extraction.
+WHAT TO DO
+1. The observation report may contain duplicate or near-duplicate entries
+   because each variant was observed independently. DEDUPLICATE: if two MARK
+   blocks describe the same mark (same margin/position/shape, overlapping
+   extent), treat them as one mark.
+2. For each unique mark, locate the corresponding passage on the CURRENT PAGE
+   image using the EXTENT hints.
+3. Read the exact verbatim text of the passage. If the marked passage clearly
+   continues onto the next page or began on the previous page, use those
+   context images to read the full passage. The CENTRE OF GRAVITY of the
+   passage determines the page assignment — but for this run, every entry
+   you produce belongs to the CURRENT PAGE because the observation report
+   is about the current page only.
+4. Produce one output entry per unique mark.
 
-If the previous or next page images are provided, use them for context when a marked
-passage spans a page boundary. IN ANY CASE, the PAGE ASSIGNED is about the CENTRE OF GRAVITY, i.e.
-for any given highlight, if it goes across a page boundary, assign the page where the important part 
-of it sits.
+If the observation report says the page has no marks (all variants reported
+NO MARKS or the report is empty of MARK blocks), output exactly: NONE
 
-For each marked passage found, output EXACTLY this format (no extra text):
+OUTPUT FORMAT — one block per marked passage:
 
 PAGE: <page label>
-MARK TYPE: description of how the underlining or highlighting looks like
-PASSAGE: <the exact text of the marked passage, verbatim from the book>
-CONTEXT: <1-2 sentences of surrounding text so the passage makes sense on its own>
-WHY NOTABLE: <brief interpretation of why a reader might find this passage striking>
+MARK TYPE: <restate the margin/position/shape from the observation>
+PASSAGE: <the exact verbatim text the mark points to or underlines>
+CONTEXT: <1-2 sentences of surrounding text so the passage stands on its own>
+WHY NOTABLE: <brief interpretation of why a reader might have marked this>
 
-If you find multiple marked passages, output each one in the above format
-separated by a blank line.
+Separate entries with a blank line.
 
-If there are NO marked passages on the current page, output exactly:
-NONE
-
-IMPORTANT: Output ONLY the entries in the format above, or NONE. No preamble, no commentary.
+Output ONLY entries in the format above (or NONE). No preamble, no commentary.
