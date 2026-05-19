@@ -2,21 +2,17 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-CATALOGUE="/Users/daniel/Workspace/plurama.eighttrigrams/rhizome-books-test-catalogue"
+CATALOGUE="${SCRIPT_DIR}/../rhizome-books-test-catalogue"
 EXPECTATIONS="${CATALOGUE}/expectations.md"
 OUT_DIR="${SCRIPT_DIR}/test-catalogue-out"
-CONF="${SCRIPT_DIR}/working-dir.conf"
 
 mkdir -p "$OUT_DIR"
-
-BACKUP="$(cat "$CONF")"
-trap 'echo "$BACKUP" > "$CONF"' EXIT
 
 # Discover examples by scanning expectations.md for headings of the form:
 #   "# <example-name> - subject: p.<page>"
 mapfile -t entries < <(
-  grep -E '^#\s+example-[0-9]+\s+-\s+subject:\s+p\.[A-Za-z0-9]+' "$EXPECTATIONS" \
-    | sed -E 's/^#\s+(example-[0-9]+)\s+-\s+subject:\s+p\.([A-Za-z0-9]+).*/\1 \2/'
+  grep -E '^#[[:space:]]+example-[0-9]+[[:space:]]+-[[:space:]]+subject:[[:space:]]+p\.[A-Za-z0-9]+' "$EXPECTATIONS" \
+    | sed -E 's/^#[[:space:]]+(example-[0-9]+)[[:space:]]+-[[:space:]]+subject:[[:space:]]+p\.([A-Za-z0-9]+).*/\1 \2/'
 )
 
 if [ ${#entries[@]} -eq 0 ]; then
@@ -33,9 +29,8 @@ for entry in "${entries[@]}"; do
     continue
   fi
   echo "==> $ex (p.$page)"
-  echo "DIR=\"$dir\"" > "$CONF"
   rm -f "${SCRIPT_DIR}/extracted-bookquotes.md"
-  "${SCRIPT_DIR}/extract-bookquotes.sh" "$page"
+  DIR="$dir" "${SCRIPT_DIR}/extract-bookquotes.sh" "$page"
   if [ -f "${SCRIPT_DIR}/extracted-bookquotes.md" ]; then
     cp "${SCRIPT_DIR}/extracted-bookquotes.md" "${OUT_DIR}/${ex}.md"
   else

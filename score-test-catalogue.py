@@ -21,7 +21,7 @@ from pathlib import Path
 from dataclasses import dataclass, field
 
 ROOT = Path(__file__).parent
-EXPECTATIONS = Path("/Users/daniel/Workspace/plurama.eighttrigrams/rhizome-books-test-catalogue/expectations.md")
+EXPECTATIONS = ROOT.parent / "rhizome-books-test-catalogue" / "expectations.md"
 OUT_DIR = ROOT / "test-catalogue-out"
 
 WORD_RE = re.compile(r"[a-z0-9]+")
@@ -194,7 +194,7 @@ def score_example(expected: Example, actual: list[Mark]) -> dict:
         "precision": round(precision, 3),
         "f1": round(f1_overall, 3),
         "count_penalty": round(count_penalty, 3),
-        "score": round(0.7 * f1_overall + 0.3 * count_penalty, 3),
+        "score": round(0.55 * f1_overall + 0.45 * count_penalty, 3),
         "per_expected": per_expected,
     }
 

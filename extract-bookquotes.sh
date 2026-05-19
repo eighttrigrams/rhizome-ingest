@@ -4,13 +4,16 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 CONFIG="${SCRIPT_DIR}/working-dir.conf"
 
-if [ ! -f "$CONFIG" ]; then
-  echo "Missing config: $CONFIG"
-  exit 1
+# Allow DIR to be set in the environment (e.g. by run-test-catalogue.sh);
+# otherwise fall back to working-dir.conf.
+if [ -z "${DIR:-}" ]; then
+  if [ ! -f "$CONFIG" ]; then
+    echo "Missing config: $CONFIG (and DIR is not set in environment)"
+    exit 1
+  fi
+  source "$CONFIG"
 fi
-
-source "$CONFIG"
-: "${DIR:?DIR not set in $CONFIG}"
+: "${DIR:?DIR not set (env) and not found in $CONFIG}"
 
 OUTPUT="${SCRIPT_DIR}/extracted-bookquotes.md"
 WORK="${SCRIPT_DIR}/current-img"

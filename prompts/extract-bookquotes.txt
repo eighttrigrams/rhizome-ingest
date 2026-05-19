@@ -70,25 +70,42 @@ the passage is the body text within its physical top–bottom span.
 For an in-text underline mark, decide first whether it is SHORT
 or LONG:
 
-- SHORT underline: ≤ 1 line of text, a single phrase or clause, with
-  no underlines on adjacent lines. PASSAGE = exactly the underlined
-  text, verbatim, nothing more. Do NOT extend back to sentence start
-  or forward to sentence end. Example: if only "he was a citizen of
-  the world" is underlined inside a larger paragraph, the PASSAGE
-  is "he was a citizen of the world" — period.
+- SHORT underline: ≤ 1 line of text, a single phrase or clause,
+  with NO underlines on the line immediately above OR immediately
+  below. (If the next or previous line is also underlined, this
+  is NOT short — it is part of a LONG run, handle it as such.)
 
-- LONG underline RUN: multi-line — underlines on consecutive (or
-  nearly consecutive, separated only by short unmarked stretches
-  within a continuous train of thought) body lines. Treat as ONE
-  passage. The passage starts at the BEGINNING OF THE SENTENCE
-  containing the first underlined word (extend back so the quote is
-  grammatical) and ends at the LAST UNDERLINED WORD.
+  A SHORT underline alone is treated as a VOCABULARY LOOKUP and
+  SKIPPED. It only counts as a marked passage if it is accompanied
+  by a separate margin cue on the same line(s) — a vertical line,
+  bracket, "!!", a written comment ("ROLL EYES", "HA", "?", etc.),
+  star, or arrow. In that case, PASSAGE = exactly the underlined
+  text, verbatim. Do NOT extend back to sentence start or forward
+  to sentence end.
+
+  Example (SKIP): only the phrase "inconstancy and versatility" is
+  underlined in a paragraph; no margin annotation → vocabulary,
+  output nothing for this mark.
+  Example (KEEP): only the phrase "he was a citizen of the world"
+  is underlined and there is a "ROLL EYES" annotation in the margin
+  next to it → PASSAGE = "he was a citizen of the world".
+
+- LONG underline RUN: multi-line — underlines on consecutive or
+  near-consecutive body lines that flow without interruption.
+  Treat as ONE passage. The passage starts at the BEGINNING OF
+  THE SENTENCE containing the first underlined word (extend back
+  so the quote is grammatical) and ends at the LAST UNDERLINED WORD.
   - HARD STOP at the last underlined word, even if mid-sentence.
     Do not auto-complete the sentence forward. If the next sentence,
     clause, or paragraph is unmarked, IT IS NOT PART OF THIS PASSAGE.
-  - Where the original sentence has clearly-marked sub-clauses that
-    the reader ELIDED (passage seems to skip from one phrase to
-    another), preserve the ellipsis with " [...] " in the output.
+  - Within a single run, if the underline pen skips a short clause
+    or phrase (a line or two) and then resumes on the same train of
+    thought, preserve the elision with " [...] " — but ONLY for
+    short skips inside the same continuous thought.
+  - DO NOT use " [...] " to bridge across an UNMARKED FULL SENTENCE
+    or longer. If there is a complete unmarked sentence (or more)
+    between two underlined regions, they are SEPARATE PASSAGES —
+    output two entries, not one with " [...] " in the middle.
 
 When in doubt, prefer LESS rather than MORE. Better to truncate
 correctly than to bloat the passage with unmarked context.
@@ -124,6 +141,15 @@ WHAT TO IGNORE
 - Printed punctuation, italics, headers, page numbers, footnotes.
 - Edge shadows, bleed-through, scan artifacts.
 - A "mark" in the report that you cannot see in the image.
+- The FORMATTING of an indented block quotation (smaller indent,
+  tighter line spacing) is not itself a mark. Only count a real
+  hand-drawn cue (vertical line, bracket, underline, "!!") next to
+  it as a mark — and be especially conservative here, since the
+  block quote's left edge can look like a faint vertical line in
+  scans.
+- Faint marks at the very page edge that could be binding shadow,
+  the curve of the next page, or a scanning artifact. If unsure,
+  omit.
 
 A typical page has 1–4 distinct marked passages.
 
