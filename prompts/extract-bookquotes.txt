@@ -107,6 +107,15 @@ or LONG:
     between two underlined regions, they are SEPARATE PASSAGES —
     output two entries, not one with " [...] " in the middle.
 
+    Worked example (SPLIT, do NOT merge): in a paragraph, the
+    underlines cover sentence 1 ("Independence did not imply
+    solitude. ... web of sociability."), then NOTHING is underlined
+    in sentence 2 ("On the contrary, he valued sociability far more
+    highly..."), and then a quoted block is underlined again
+    ('"Your men from whom..."'). That is TWO separate passages:
+    entry 1 ends at "web of sociability."; entry 2 begins at
+    '"Your men...'. Do not glue them with " [...] ".
+
 When in doubt, prefer LESS rather than MORE. Better to truncate
 correctly than to bloat the passage with unmarked context.
 
@@ -150,6 +159,13 @@ WHAT TO IGNORE
 - Faint marks at the very page edge that could be binding shadow,
   the curve of the next page, or a scanning artifact. If unsure,
   omit.
+- Right-margin marks are especially likely to be scan artifacts
+  (binding shadow, page curl, dust). Only count a right-margin mark
+  if it is unambiguously a deliberate hand-drawn shape (a clear
+  bracket, a clear vertical line of consistent thickness, etc.),
+  not a row of stray dots or shadows.
+- WHEN IN DOUBT, OMIT. A missing real mark is a smaller error
+  than a hallucinated one.
 
 A typical page has 1–4 distinct marked passages.
 
@@ -178,4 +194,5 @@ If, after consolidation and verification against the image, there
 are no real marked passages, output exactly: NONE
 
 Output ONLY entries in the format above (or NONE). No preamble,
-no commentary.
+no commentary. Do NOT emit any separator line (no "-----", no row
+of dashes, no horizontal rule). Do NOT duplicate entries.
