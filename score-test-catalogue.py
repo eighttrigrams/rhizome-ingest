@@ -153,6 +153,25 @@ def parse_actual(path: Path) -> list[Mark]:
 
 
 def score_example(expected: Example, actual: list[Mark]) -> dict:
+    # Negative case: the example is marked "NO MARKED PASSAGES" in
+    # expectations.md (= no expected marks). Perfect score iff actual
+    # is also empty; any hallucinated mark drops the score sharply.
+    if not expected.marks:
+        n_actual = len(actual)
+        if n_actual == 0:
+            return {
+                "n_expected": 0, "n_actual": 0, "extras": 0,
+                "recall": 1.0, "precision": 1.0, "f1": 1.0,
+                "count_penalty": 1.0, "score": 1.0, "per_expected": [],
+            }
+        return {
+            "n_expected": 0, "n_actual": n_actual, "extras": n_actual,
+            "recall": 0.0, "precision": 0.0, "f1": 0.0,
+            "count_penalty": 0.0,
+            "score": round(max(0.0, 1.0 - 0.5 * n_actual), 3),
+            "per_expected": [],
+        }
+
     exp_words = [normalise(m.passage) for m in expected.marks]
     act_words = [normalise(m.passage) for m in actual]
 

@@ -99,22 +99,30 @@ or LONG:
     Do not auto-complete the sentence forward. If the next sentence,
     clause, or paragraph is unmarked, IT IS NOT PART OF THIS PASSAGE.
   - Within a single run, if the underline pen skips a short clause
-    or phrase (a line or two) and then resumes on the same train of
-    thought, preserve the elision with " [...] " — but ONLY for
-    short skips inside the same continuous thought.
-  - DO NOT use " [...] " to bridge across an UNMARKED FULL SENTENCE
-    or longer. If there is a complete unmarked sentence (or more)
-    between two underlined regions, they are SEPARATE PASSAGES —
-    output two entries, not one with " [...] " in the middle.
+    or phrase (or even a full sentence) and then resumes on the
+    SAME topic / argument / quoted voice, preserve the elision with
+    " [...] " and keep it as ONE passage. The reader is selectively
+    underlining the key spine of one continuous thought.
+  - Split into SEPARATE passages only when the gap between underline
+    runs marks a real break — a paragraph break, a topic shift,
+    a different speaker, or an intervening discussion that clearly
+    changes register. Don't split just because one or two sentences
+    in the middle weren't underlined.
 
-    Worked example (SPLIT, do NOT merge): in a paragraph, the
-    underlines cover sentence 1 ("Independence did not imply
-    solitude. ... web of sociability."), then NOTHING is underlined
-    in sentence 2 ("On the contrary, he valued sociability far more
-    highly..."), and then a quoted block is underlined again
-    ('"Your men from whom..."'). That is TWO separate passages:
-    entry 1 ends at "web of sociability."; entry 2 begins at
-    '"Your men...'. Do not glue them with " [...] ".
+    Worked example (SPLIT): in a paragraph, the underlines cover
+    "Independence did not imply solitude. ... web of sociability."
+    Then an UNDERLINED sentence is skipped that pivots topic ("On
+    the contrary, he valued sociability far more highly..." about
+    a DIFFERENT subject). Then a quoted block is underlined
+    ("Your men from whom..."). Split into TWO passages — the
+    intervening sentence changes the thread.
+
+    Worked example (MERGE with [...]): in a paragraph, "Benevolence
+    ... bloodless form of goodwill" is underlined, then a brief
+    sentence "founded more on indifference than on devotion" is
+    not underlined, then "Rousseau's mockery of ..." continues the
+    same critique of cosmopolitan benevolence. Output ONE passage
+    with " [...] " bridging the gap — same train of thought.
 
 When in doubt, prefer LESS rather than MORE. Better to truncate
 correctly than to bloat the passage with unmarked context.
@@ -147,7 +155,12 @@ WHAT TO IGNORE
   alone (not part of a continuous multi-line underline run): this is
   a vocabulary lookup, NOT a passage mark. Skip even if the report
   lists it.
-- Printed punctuation, italics, headers, page numbers, footnotes.
+- Printed italics are NOT hand-drawn underlines. In old typography
+  italics are slanted body text, NOT a wavy or straight pencil line
+  drawn beneath the words. Do not promote italic text to a passage
+  mark. If the observation report lists "underline" for what is in
+  fact printed italics in the image, OMIT it.
+- Printed punctuation, headers, page numbers, footnotes.
 - Edge shadows, bleed-through, scan artifacts.
 - A "mark" in the report that you cannot see in the image.
 - The FORMATTING of an indented block quotation (smaller indent,
@@ -165,9 +178,23 @@ WHAT TO IGNORE
   bracket, a clear vertical line of consistent thickness, etc.),
   not a row of stray dots or shadows.
 - WHEN IN DOUBT, OMIT. A missing real mark is a smaller error
-  than a hallucinated one.
+  than a hallucinated one — but only "in doubt" applies. A clearly
+  visible, unambiguous mark must be kept even if the page already
+  has several others.
+- Many pages in the book have NO marks at all and the correct
+  output is NONE. When a page IS marked, it usually carries 1–3
+  passages, sometimes 4 or more. Do NOT invent marks to satisfy a
+  quota. The check on every entry is: it must correspond to a real,
+  distinct, image-visible mark. If you find yourself about to output
+  4+ entries, re-verify each against the image and drop only those
+  that on second look are duplicates of another quadrant, italics
+  mistaken for underlines, or scan artifacts. Keep the ones that
+  pass that test.
 
-A typical page has 1–4 distinct marked passages.
+In the book at large many pages have NO marks; the correct output
+for those is NONE. When a page does carry marks it typically has
+1–3 distinct marked passages, sometimes 4+. Do not assume marks
+must be present.
 
 ================================================================
 EXTRACTING PASSAGE TEXT
@@ -176,6 +203,17 @@ EXTRACTING PASSAGE TEXT
   ("prej-" + "udices" → "prejudices"). Do not paraphrase.
 - If the passage clearly overflows onto the next page or began on
   the previous page, use the context images to complete it.
+
+PAGE-BOUNDARY ATTRIBUTION
+- A passage's "home" is the page where the MARK BEGINS (where the
+  underline / margin cue first starts).
+- If the underline or margin mark BEGINS on the PREVIOUS page and
+  only the tail of it spills onto the CURRENT page, do NOT output
+  a separate entry for that tail. It belongs to the previous
+  page's entry. Just leave it out.
+- If the underline or margin mark BEGINS on the CURRENT page and
+  overflows onto the NEXT page, output ONE entry on the current
+  page, with the PASSAGE completed using the next-page image.
 
 ================================================================
 OUTPUT FORMAT

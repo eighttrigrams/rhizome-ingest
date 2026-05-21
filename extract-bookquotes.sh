@@ -132,7 +132,10 @@ You are looking at: $hint
 
 Read the image file: $img
 "
-  echo "$input" | claude -p --model claude-opus-4-7 --effort low --add-dir "$WORK" --tools "Read" 2>/dev/null || true
+  # Bumped to medium: at low effort the observer often returns "no marks"
+  # for whole quadrants that actually contain faint pencil marks (e.g. p.124),
+  # which the downstream extract step cannot recover from.
+  echo "$input" | claude -p --model claude-opus-4-7 --effort medium --add-dir "$WORK" --tools "Read" 2>/dev/null || true
 }
 
 for page in "${all_pages[@]}"; do
