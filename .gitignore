@@ -11,4 +11,8 @@ extracted-bookquotes.*.md
 data
 current-img
 test-catalogue-out
+.run
+test-run*.log
 .DS_Store
+.claude/scheduled_tasks.lock
+__pycache__/

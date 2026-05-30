@@ -1,31 +1,54 @@
 You are examining ONE image of a scanned book page (or a portion of it) for
-hand-drawn marks the reader added to highlight passages.
+hand-drawn marks the reader added to highlight passages. Find EVERY mark — a
+miss here cannot be recovered by any later step.
 
 WHAT COUNTS AS A MARK
-- Vertical lines, brackets, braces, curly shapes drawn in EITHER margin
+Structural marks (they bracket / underline a passage):
+- Vertical lines, brackets, braces, curly shapes in EITHER margin
 - Underlines spanning more than one word in the body text
-- Stars, arrows, dots, checkmarks, boxes, circles
-- Marks may be FAINT pencil or pen — faint is still a mark
-- A single underlined uncommon word is a vocabulary lookup — IGNORE it
+Emphasis marks (they single a passage out as important — small and easy to
+miss, so look hard for them):
+- Exclamation mark(s) "!" or "!!", or a "?" in the margin
+- Stars, arrows, ticks, checkmarks
+- A squiggle, or a circle / loop drawn around words (an encircling)
+- A word or comment written in the margin (e.g. "HA", "ROLL EYES")
+- A doubled or wavy underline, or an underline laid over already-underlined text
+Marks may be FAINT pencil — faint, thin, or short is still a mark.
+
+HOW TO SCAN (be systematic — do not skim)
+1. UNDERLINE SWEEP: read DOWN the body text line by line, all the way to the
+   last line. Look for any thin horizontal line beneath words; pencil
+   underlines are often very light and easily overlooked. An underline can run
+   for many consecutive lines — do not miss a long run. Pay special attention
+   to the LAST lines of the page: a mark there often continues onto the next
+   page and is the easiest to miss.
+2. MARGIN SWEEP: run down BOTH margins looking for the structural and emphasis
+   marks above, including tiny ones — a single "!", a star, a tick. When you
+   see a margin mark, say whether it looks like an EMPHASIS mark (!, star,
+   arrow, squiggle, circle, comment) or a plain structural one (line, bracket).
+3. Footnotes count: a hand-underline or margin mark on FOOTNOTE text is a real
+   mark (only the printed footnote text / reference number itself is not).
 
 WHAT IS NOT A MARK
-- Printed punctuation, italics, headers, page numbers, footnotes
-- Edge shadows uniform along the whole page edge
-- Bleed-through with mirrored letterforms
+- Printed punctuation, headers, page numbers, the printed footnote rule
+- PRINTED ITALICS ARE NOT AN UNDERLINE. An underline is a separate hand-drawn
+  line BENEATH the words; italics are slanted printed letters with NO line under
+  them. Italic terms, book titles, and emphasized words are printed, not marked
+  — never report italic type as an underline.
+- Edge shadows uniform along the whole page edge; bleed-through (mirrored letters)
+- A single underlined uncommon word with no other cue — vocabulary lookup, IGNORE
 - Pure inference from interesting prose
 
-Scan the entire image carefully. Pages typically have 1–4 marks but may have
-more. Be exhaustive — list every distinct mark you can see, including faint
-ones. Do not stop at the first mark.
+Pages typically have 1–4 marks, sometimes more, sometimes none. Be exhaustive —
+list every distinct mark you can see, faint ones included. Do not stop early.
 
 OUTPUT FORMAT
 For each mark, output one block:
 
-MARK: <which margin/in-text> | <vertical position on the original upright page: top/upper-middle/middle/lower-middle/bottom> | <shape: vertical line / bracket / curly brace / underline / star / etc.>
-EXTENT: <approximate first words and last words of the lines the mark spans, OR the underlined phrase verbatim>
-NOTES: <anything else helpful — faintness, uncertainty, whether it could be a vocabulary underline you skipped>
+MARK: <left margin / right margin / in-text> | <top / upper-middle / middle / lower-middle / bottom> | <shape: underline / vertical line / bracket / curly brace / exclamation / star / arrow / tick / circle / comment / ...>
+EXTENT: <approx first and last words of the lines it spans, OR the underlined phrase verbatim>
+NOTES: <faintness or uncertainty; whether it is an EMPHASIS mark (!, star, squiggle, circle, comment) vs a plain structural mark; whether it might be a vocabulary underline>
 
 Separate marks with a blank line.
-If after thorough scanning you find NO marks, output exactly: NO MARKS
-
+If after a thorough sweep you find NO marks, output exactly: NO MARKS
 Output ONLY mark blocks (or NO MARKS). No preamble, no commentary.
